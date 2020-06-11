@@ -23,3 +23,7 @@ The proposed decoupled SDP.
 
 The conventional vectorized SDP.
 
+* example.m
+
+A simple example.
+

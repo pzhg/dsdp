@@ -2,18 +2,22 @@ function [f, H]=d2dsdp(Y, XR, XT, L, N, M, Tr, Tt, sigma, flag)
 
 % Decoupled 2D SDP
 % By Zhe Zhang, 9/8/2016, zzhang18@gmu.edu
-% Solve formulation: Y=H*X, need CVX installed, need MEMP_1D.m
+% Solve formulation: Y=XR*H*XT, where XR is the receiver modifier, and XT is the transmitter modifier
+% Both XR and XT can be set to Identity Matrix if you need to solve Y=H*X or Y=H
+% H is a 2-D sinosoidal signal in the form of H=Ar*D*At, where Ar, At are array manifold matrices and D is dianogal
+% Need CVX installed, need MEMP_1D.m
 % Input:
-%     Y: Measurement, M-by-T
-%     X: Training set, N-by-T. For DOA, let X=eye(N)
-%     L: Sparsity
-%     N, M: Size of H
-%     T: Size of Training. For DOA, let T=N
+%     Y: Measurement, Tr-by-Tt
+%     XR: Receiver Modifier, Tr-by-N. For DOA, let XR=eye(N)
+%	  XT: Transmitter Modifier, M-by-Tt. For DOA, let XT=eye(M)
+%     L: Sparsity, rank of H
+%     N, M: Size of H (N-by-M)
+%     Tr, Tt: Size of XR, XT. For DOA, let Tr=N and Tt=M
 %     sigma: Noise Level. For noiseless case, let sigma=0
 %     flag: DOA algorithm. 'music' or 'MEMP'.
 % Output:
-%     f: Frequencies
-%     H: Channel
+%     f: Recovered (digital) frequencies / angles in range [0, 1]
+%     H: Recovered sinosoidal signal, N-by-M
 
 %% Regularization Parameter
 if sigma>0
