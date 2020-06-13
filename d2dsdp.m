@@ -2,14 +2,14 @@ function [f, H]=d2dsdp(Y, XR, XT, L, N, M, Tr, Tt, sigma, flag)
 
 % Decoupled 2D SDP
 % By Zhe Zhang, 9/8/2016, zzhang18@gmu.edu
-% Solve formulation: Y=XR*H*XT, where XR is the receiver modifier, and XT is the transmitter modifier
+% Solve formulation: Y=XR*H*XT', where XR is the receiver modifier, and XT is the transmitter modifier
 % Both XR and XT can be set to Identity Matrix if you need to solve Y=H*X or Y=H
 % H is a 2-D sinosoidal signal in the form of H=Ar*D*At, where Ar, At are array manifold matrices and D is dianogal
 % Need CVX installed, need MEMP_1D.m
 % Input:
 %     Y: Measurement, Tr-by-Tt
 %     XR: Receiver Modifier, Tr-by-N. For DOA, let XR=eye(N)
-%	  XT: Transmitter Modifier, M-by-Tt. For DOA, let XT=eye(M)
+%	  XT: Transmitter Modifier, Tt-by-M. For DOA, let XT=eye(M)
 %     L: Sparsity, rank of H
 %     N, M: Size of H (N-by-M)
 %     Tr, Tt: Size of XR, XT. For DOA, let Tr=N and Tt=M
@@ -30,7 +30,7 @@ cvx_begin quiet
     variable Tu_r(N, N) complex hermitian toeplitz
     variable Tu_t(M, M) complex hermitian toeplitz
     if sigma>0
-        minimize lambda/(2*sqrt(M*N))*(trace(Tu_r)+trace(Tu_t))+1/2*quad_form(Y(:)-reshape(XR*H*XT, [Tr*Tt, 1]), eye(Tr*Tt))
+        minimize lambda/(2*sqrt(M*N))*(trace(Tu_r)+trace(Tu_t))+1/2*quad_form(Y(:)-reshape(XR*H*XT', [Tr*Tt, 1]), eye(Tr*Tt))
     else
         minimize 1/(2*sqrt(M*N))*(trace(Tu_r)+trace(Tu_t))
     end
@@ -39,7 +39,7 @@ cvx_begin quiet
             [Tu_t, H'; H, Tu_r]==hermitian_semidefinite(M+N)
         else
             [Tu_t, H'; H, Tu_r]==hermitian_semidefinite(M+N)
-            Y==H*X
+            Y==XR*H*XT'
         end
 cvx_end
 

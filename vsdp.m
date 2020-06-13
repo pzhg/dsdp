@@ -2,13 +2,15 @@ function [f, H]=vsdp(Y, XR, XT, L, N, M, Tr, Tt, sigma)
 
 % Vectorized 2D SDP
 % By Zhe Zhang, 9/8/2016, zzhang18@gmu.edu
-% Solve formulation: Y=H*X, need CVX installed, need MaPP_2D.m
+% Solve formulation: Y=XR*H*XT', need CVX installed, need MaPP_2D.m
 % Input:
-%     Y: Measurement, M-by-T
-%     X: Training set, N-by-T. For DOA, let X=eye(N)
+%     Y: Measurement, Tr-by-Tt
+%     XR: Receiver Modifier, Tr-by-N. For DOA, let XR=eye(N)
+%	  XT: Transmitter Modifier, Tt-by-M. For DOA, let XT=eye(M)
 %     L: Sparsity
 %     N, M: Size of H
-%     T: Size of Training. For DOA, let T=N
+%     Tr: Size of XR. For DOA, let Tr=N
+%     Tt: Size of XT. For DOA, let Tt=M
 %     sigma: Noise Level. For noiseless case, let sigma=0
 % Output:
 %     f: Frequencies
