@@ -15,15 +15,15 @@ It also retains the benefits of ANM in terms of super-resolution, small number o
 
 # Files
 
-* d2dsdp.m
+> `d2dsdp.m`
 
 The proposed decoupled SDP.
 
-* vsdp.m
+> `vsdp.m`
 
 The conventional vectorized SDP.
 
-* example.m
+> `example.m`
 
 A simple example.
 
