@@ -1,4 +1,4 @@
-# Decoupled SDP for 2-D semidifinite programming
+# Decoupled ANM (D-ANM) for 2-D semidifinite programming
 
 Paper:
 
