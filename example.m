@@ -3,15 +3,18 @@ clear all;
 close all;
 warning off;
 
-N=10;
-M=10;
-L=4;
+%% Set Parameters
+N=16;           % Size N
+M=16;           % Size M
+L=4;            % Sparsity
 SNR=20;
 
+%% Frequencies
 f_r=[0.35 0.1 0.67 0.92];
 f_t=[0.55 0.34 0.87 0.06];
 c=[12, 8, 10, 11];
 
+%% Generate Array Manifolds
 A_r=[];
 A_t=[];
 v_M=[0:(M-1)]';
@@ -25,7 +28,13 @@ H=A_r*diag(c)*A_t';
 HW=awgn(H, SNR, 'measured');
 W=HW-H;
 sigma=sqrt(sum(abs(W(:)).^2)/length(W(:)));
-[f, H_e]=d2dsdp(HW, eye(N), eye(M), L, N, M, N, M, sigma, 'music');
 
+%% Decoupled ANM
+tic; [f, H_e]=d2dsdp(HW, eye(N), eye(M), L, N, M, N, M, sigma, 'music'); toc;
+ef_r=f(1, :)
+ef_t=f(2, :)
+
+%% Vectorized ANM
+tic; [f, H_e]=vsdp(HW, eye(N), eye(M), L, N, M, N, M, sigma); toc;
 ef_r=f(1, :)
 ef_t=f(2, :)
