@@ -26,8 +26,10 @@ function [f, p, status] = MEMP_1D(T, N, K)
 
     res_rel = norm(Tvec - mat_bbH * p) / norm(Tvec);
 
-    if any(p <- 1e-4) || res_rel > 1e-6;
+    if any(p <- 1e-4) || res_rel > 1e-6
         status = false;
     end
+    
+    p = p / N;
 
 end
